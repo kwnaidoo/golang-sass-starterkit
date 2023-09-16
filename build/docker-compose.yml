@@ -1,0 +1,33 @@
+version: "3.3"
+services:
+  gosass-server:
+    container_name: gosass-server
+    restart: always
+    env_file:
+      - .env
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - 3001:3001
+
+  gosass-redis:
+    container_name: gosass-redis
+    image: redis:6.2-alpine
+    restart: always
+    command: redis-server --save 20 1 --loglevel warning
+    volumes: 
+      - gosass-redis:/data
+
+  gosass-mysqldb:
+    container_name: gosass-db
+    image: mariadb:10.4
+    restart: always
+    env_file:
+        - .env
+    volumes:
+      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - gosass-mysqldb:/var/lib/mysql
+volumes:
+  gosass-mysqldb:
+  gosass-redis:

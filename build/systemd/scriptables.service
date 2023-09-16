@@ -1,0 +1,17 @@
+[Unit]
+Description=gosass
+After=network.target
+
+[Service]
+User=www-data
+Group=www-data
+Restart=always
+RestartSec=3
+EnvironmentFile=/etc/environment
+WorkingDirectory=/var/www/gosass/
+ExecStart=/var/www/gosass/server
+StandardOutput=append:/var/log/gosass.log
+StandardError=append:/var/log/gosass.error.log
+
+[Install]
+WantedBy=multi-user.target
